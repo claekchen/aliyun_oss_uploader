@@ -13,6 +13,7 @@ let config = {
 }
 */
 let client = new OSSObject(config)
+let filename = null
 let applyTokenDo = (func) => func(client)
 let progress = (p) => (done) => {
   let bar = document.getElementById('progress-bar')
@@ -20,6 +21,9 @@ let progress = (p) => (done) => {
   bar.innerHTML = Math.floor(p * 100) + '%'
   done()
 }
+let splits = (word) => (string) => string.split(word)
+let getLastname = (string) => splits('\\')(string).pop()
+
 let uploadFile = (client) => {
   let file = document.getElementById('file').files[0]
   let key = document.getElementById('object-key-file').value.trim() || 'object'
@@ -29,7 +33,9 @@ let uploadFile = (client) => {
     progress: progress
   }).then(function (res) {
     console.log('upload success: %j', res)
-    return listFiles(client)
+    let url = `https://${config.bucket}.${config.region}.aliyuncs.com/${filename}`
+    window.alert(`your image url is ：${url}`)
+    // return listFiles(client)
   })
 }
 /*
@@ -89,6 +95,10 @@ let downloadFile = (client) => {
 */
 window.onload = () => {
   document.getElementById('file-button').onclick = () => applyTokenDo(uploadFile)
+  document.getElementById('file').onchange = () => {
+    filename = getLastname(document.getElementById('file').value)
+    document.getElementById('object-key-file').value = filename
+  }
   /*
   document.getElementById('content-button').onclick = function () {
     applyTokenDo(uploadContent)
