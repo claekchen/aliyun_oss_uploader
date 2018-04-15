@@ -34,7 +34,8 @@ let uploadFile = (client) => {
   }).then(function (res) {
     console.log('upload success: %j', res)
     let url = `https://${config.bucket}.${config.region}.aliyuncs.com/${filename}`
-    window.alert(`your image url is ：${url}`)
+    document.getElementById('url').innerHTML = url
+    // window.alert(`your image url is ：${url}`)
     // return listFiles(client)
   })
 }
