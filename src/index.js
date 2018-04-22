@@ -1,20 +1,31 @@
 import OSS from 'ali-oss'
-import config from '../config.json'
+// import config from '../config.json'
 let Buffer = OSS.Buffer
 let OSSObject = OSS.Wrapper
 let STS = OSSObject.STS
-
-/*
-let config = {
-  region: '',
-  accessKeyId: '',
-  accessKeySecret: '',
-  bucket: ''
-}
-*/
-let client = new OSSObject(config)
+let config = {}
+let client
 let filename = null
-let applyTokenDo = (func) => func(client)
+let applyTokenDo
+chrome.storage.sync.get({
+  region: 'red',
+  accessKeyId: null,
+  accessKeySecret: null,
+  bucket: null
+}, function(items) {
+  config = {
+    region: items.region,
+    accessKeyId: items.accessKeyId,
+    accessKeySecret: items.accessKeySecret,
+    bucket: items.bucket
+  }
+  try {
+    client = new OSSObject(config)
+  } catch (error) {
+    console.log(error)
+  }
+  applyTokenDo = (func) => func(client)
+})
 let progress = (p) => (done) => {
   let bar = document.getElementById('progress-bar')
   bar.style.width = Math.floor(p * 100) + '%'
@@ -99,6 +110,15 @@ window.onload = () => {
   document.getElementById('file').onchange = () => {
     filename = getLastname(document.getElementById('file').value)
     document.getElementById('object-key-file').value = filename
+  }
+  document.getElementById('go-to-options').onclick = () => {
+    if (chrome.runtime.openOptionsPage) {
+      // New way to open options pages, if supported (Chrome 42+).
+      chrome.runtime.openOptionsPage();
+    } else {
+      // Reasonable fallback.
+      window.open(chrome.runtime.getURL('option.html'));
+    }
   }
   /*
   document.getElementById('content-button').onclick = function () {

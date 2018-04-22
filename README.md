@@ -4,22 +4,19 @@
 
 # Usage
 
-在根目录下新建一个config.json文件，参照你的阿里云配置，填入以下内容：
-
-```
-{
-  "region": "oss-cn-beijing",
-  "accessKeyId": "@#！#！#！！",
-  "accessKeySecret": "！#！#！@#！#",
-  "bucket": "myimage"
-}
-```
-
-然后在命令行中运行
+在命令行中运行
 ```
 npm install
 webpack
 ```
 
-最后在开发者模式下，将本文件夹安装为chrome插件即可。
+在开发者模式下，将本文件夹安装为chrome插件, 在使用前请先配置您的阿里云OSS相关信息。
+例如：
+```
+  "region": "oss-cn-beijing",
+  "accessKeyId": "@#！#！#！！",
+  "accessKeySecret": "！#！#！@#！#",
+  "bucket": "myimage"
+```
+如果配置后使用仍有问题，请尝试重启Chrome。
 
